@@ -209,7 +209,7 @@ function Block({ b, onScroll }) {
         ))}
       </div>
     );
-    case 'line': return <p className={`text-xs font-mono ${colorMap[b.color] || 'text-slate-300'}`}>{b.text}</p>;
+    case 'line': return <p className={`text-xs font-mono whitespace-pre ${colorMap[b.color] || 'text-slate-300'}`}>{b.text}</p>;
     case 'action': return (
       <button onClick={() => onScroll(b.scroll)} className="text-xs font-mono text-violet-400 hover:text-violet-300 underline underline-offset-2 transition-colors text-left">
         {b.text}
