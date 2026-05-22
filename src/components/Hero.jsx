@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { TypeAnimation } from 'react-type-animation';
-import { Github, Linkedin, Twitter, Facebook, Instagram, Download, ArrowRight, Sparkles, Bot, Cpu } from 'lucide-react';
+import { Github, Linkedin, Twitter, Facebook, Instagram, Download, ArrowRight, Sparkles, Bot } from 'lucide-react';
 
 const socialLinks = [
   { icon: Github, href: 'https://github.com/hamsakib', label: 'GitHub', color: 'hover:text-white' },
@@ -281,17 +281,6 @@ export default function Hero() {
               </div>
 
               {/* Floating stat badges */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute -top-4 -right-4 glass border border-violet-500/25 rounded-xl px-3 py-2 flex items-center gap-2"
-              >
-                <Cpu size={14} className="text-violet-400" />
-                <div>
-                  <p className="text-[10px] text-slate-500 leading-none">Powered by</p>
-                  <p className="text-xs font-bold text-white leading-none mt-0.5">Claude AI</p>
-                </div>
-              </motion.div>
 
               <motion.div
                 animate={{ y: [0, 8, 0] }}

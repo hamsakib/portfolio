@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Twitter, Facebook, Instagram, Heart, Zap } from 'lucide-react';
+import { Github, Linkedin, Twitter, Facebook, Instagram, Heart } from 'lucide-react';
 
 const socials = [
   { icon: Github, href: 'https://github.com/hamsakib', label: 'GitHub' },
@@ -115,8 +115,7 @@ export default function Footer() {
         <div className="border-t border-white/[0.05] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-600 text-xs flex items-center gap-1.5">
             © 2025 Hasan Al Mahmud Sakib. Built with{' '}
-            <Heart size={11} className="text-red-400" /> and{' '}
-            <Zap size={11} className="text-violet-400" /> Claude AI.
+            <Heart size={11} className="text-red-400" /> passion.
           </p>
           <div className="flex items-center gap-2 text-xs text-slate-600">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
