@@ -282,25 +282,82 @@ export default function Hero() {
 
               {/* Floating stat badges */}
 
+              {/* Top-right: React */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute -top-4 -right-4 glass border border-violet-500/25 rounded-xl px-3 py-2 flex items-center gap-2"
+              >
+                <span className="text-violet-400 font-black text-base leading-none">⚛</span>
+                <div>
+                  <p className="text-[10px] text-slate-500 leading-none">Frontend</p>
+                  <p className="text-xs font-bold text-white leading-none mt-0.5">React</p>
+                </div>
+              </motion.div>
+
+              {/* Top-left: Python */}
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut', delay: 0.7 }}
+                className="absolute -top-4 -left-4 glass border border-blue-500/25 rounded-xl px-3 py-2 flex items-center gap-2"
+              >
+                <span className="text-blue-400 font-black text-xs font-mono leading-none">PY</span>
+                <div>
+                  <p className="text-[10px] text-slate-500 leading-none">Backend</p>
+                  <p className="text-xs font-bold text-white leading-none mt-0.5">Python</p>
+                </div>
+              </motion.div>
+
+              {/* Right-middle: TypeScript (lg only) */}
+              <motion.div
+                animate={{ y: [0, 7, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1.4 }}
+                className="absolute top-1/3 -right-20 glass border border-cyan-500/25 rounded-xl px-3 py-2 hidden lg:flex items-center gap-2"
+              >
+                <span className="text-cyan-400 font-black text-xs font-mono leading-none">TS</span>
+                <div>
+                  <p className="text-[10px] text-slate-500 leading-none">Language</p>
+                  <p className="text-xs font-bold text-white leading-none mt-0.5">TypeScript</p>
+                </div>
+              </motion.div>
+
+              {/* Left-middle: Pro English (lg only) */}
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                className="absolute top-1/2 -left-20 glass border border-emerald-500/25 rounded-xl px-3 py-2 hidden lg:flex items-center gap-2"
+              >
+                <span className="text-emerald-400 font-black text-xs leading-none">EN</span>
+                <div>
+                  <p className="text-[10px] text-slate-500 leading-none">Level</p>
+                  <p className="text-xs font-bold text-white leading-none mt-0.5">Pro English</p>
+                </div>
+              </motion.div>
+
+              {/* Bottom-right: Node.js */}
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                className="absolute -bottom-4 -right-4 glass border border-green-500/25 rounded-xl px-3 py-2 flex items-center gap-2"
+              >
+                <span className="text-green-400 font-black text-xs font-mono leading-none">JS</span>
+                <div>
+                  <p className="text-[10px] text-slate-500 leading-none">Runtime</p>
+                  <p className="text-xs font-bold text-white leading-none mt-0.5">Node.js</p>
+                </div>
+              </motion.div>
+
+              {/* Bottom-left: Open to Work */}
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
                 className="absolute -bottom-4 -left-4 glass border border-cyan-500/25 rounded-xl px-3 py-2 flex items-center gap-2"
               >
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
                 <div>
                   <p className="text-[10px] text-slate-500 leading-none">Status</p>
                   <p className="text-xs font-bold text-emerald-400 leading-none mt-0.5">Open to Work</p>
                 </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                className="absolute top-1/2 -left-20 glass border border-emerald-500/25 rounded-xl px-3 py-2 hidden lg:flex flex-col items-center gap-0.5"
-              >
-                <span className="text-[11px] font-black text-emerald-400 leading-tight text-center">Pro</span>
-                <span className="text-[10px] text-slate-500 leading-none text-center">English</span>
               </motion.div>
             </motion.div>
 
