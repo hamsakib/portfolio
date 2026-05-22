@@ -240,16 +240,25 @@ export default function Terminal() {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;
     if (cmd === 'clear') { setHistory([]); setCmdHist(p => [cmd, ...p]); setHistIdx(-1); setInput(''); return; }
+    if (cmd === '↑↑↓↓←→←→ba' || cmd === 'konami') {
+      setTimeout(() => window.dispatchEvent(new CustomEvent('konami')), 300);
+    }
 
     const fn = CMDS[cmd];
     let blocks;
-    if (fn) {
+    if (cmd === '↑↑↓↓←→←→ba' || cmd === 'konami') {
+      blocks = [
+        { t: 'line', color: 'mgreen', text: '> Konami sequence detected...' },
+        { t: 'ok',   text: '🐇 Entering the Matrix. Hold on...' },
+      ];
+    } else if (fn) {
       blocks = fn();
       const autoScroll = blocks.find(b => b.t === 'action' && b.autoScroll);
       if (autoScroll) setTimeout(() => scrollToSection(autoScroll.scroll), 900);
     } else {
       blocks = [{ t: 'line', color: 'red', text: `command not found: ${cmd}. Try "help"` }];
     }
+
 
     setHistory(p => [...p, { type: 'input', text: cmd }, { type: 'output', blocks }]);
     setCmdHist(p => [cmd, ...p]);

@@ -46,8 +46,13 @@ export default function KonamiEgg() {
         setActive(true);
       }
     };
+    const onCustom = () => setActive(true);
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('konami', onCustom);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('konami', onCustom);
+    };
   }, []);
 
   useEffect(() => {
