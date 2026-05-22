@@ -11,6 +11,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
 import KonamiEgg from './components/KonamiEgg';
+import CursorTrail from './components/CursorTrail';
 import ProjectDetail from './pages/ProjectDetail';
 
 function ScrollToTop() {
@@ -41,6 +42,7 @@ export default function App() {
       <Navbar />
       <ChatWidget />
       <KonamiEgg />
+      <CursorTrail />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/project/:id" element={<ProjectDetail />} />

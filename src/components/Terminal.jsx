@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-// ── Particle canvas ──────────────────────────────────────────────────────────
 function useParticleCanvas(canvasRef) {
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -9,24 +8,15 @@ function useParticleCanvas(canvasRef) {
     const ctx = canvas.getContext('2d');
     let animId;
     const particles = [];
-
     const setSize = () => {
       const p = canvas.parentElement;
       if (p) { canvas.width = p.clientWidth; canvas.height = p.clientHeight; }
     };
     setSize();
     window.addEventListener('resize', setSize);
-
     for (let i = 0; i < 55; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 1.4 + 0.4,
-      });
+      particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35, r: Math.random() * 1.4 + 0.4 });
     }
-
     const draw = () => {
       const W = canvas.width, H = canvas.height;
       ctx.clearRect(0, 0, W, H);
@@ -34,28 +24,19 @@ function useParticleCanvas(canvasRef) {
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
         if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(124,58,237,0.55)';
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(124,58,237,0.55)'; ctx.fill();
       }
       const MAX = 125;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+          const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < MAX) {
             const t = particles[i].x / W;
-            const r = Math.round(124 * (1 - t) + 6 * t);
-            const g = Math.round(58 * (1 - t) + 182 * t);
-            const b = Math.round(237 * (1 - t) + 212 * t);
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(${r},${g},${b},${(1 - d / MAX) * 0.22})`;
-            ctx.lineWidth = 0.7;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
+            const r = Math.round(124 * (1 - t) + 6 * t), g = Math.round(58 * (1 - t) + 182 * t), b = Math.round(237 * (1 - t) + 212 * t);
+            ctx.beginPath(); ctx.strokeStyle = `rgba(${r},${g},${b},${(1 - d / MAX) * 0.22})`; ctx.lineWidth = 0.7;
+            ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
           }
         }
       }
@@ -66,19 +47,47 @@ function useParticleCanvas(canvasRef) {
   }, []);
 }
 
-// ── Command definitions ──────────────────────────────────────────────────────
+// 5×5 pixel font for ascii-art command
+const PF = {
+  A:[' ### ','#   #','#####','#   #','#   #'], B:['#### ','#   #','#### ','#   #','#### '],
+  C:[' ####','#    ','#    ','#    ',' ####'], D:['#### ','#   #','#   #','#   #','#### '],
+  E:['#####','#    ','###  ','#    ','#####'], F:['#####','#    ','###  ','#    ','#    '],
+  G:[' ####','#    ','# ###','#   #',' ####'], H:['#   #','#   #','#####','#   #','#   #'],
+  I:['#####','  #  ','  #  ','  #  ','#####'], J:['  ###','    #','    #','#   #',' ### '],
+  K:['#   #','#  # ','###  ','#  # ','#   #'], L:['#    ','#    ','#    ','#    ','#####'],
+  M:['#   #','## ##','# # #','#   #','#   #'], N:['#   #','##  #','# # #','#  ##','#   #'],
+  O:[' ### ','#   #','#   #','#   #',' ### '], P:['#### ','#   #','#### ','#    ','#    '],
+  Q:[' ### ','#   #','# # #','#  # ',' ## #'], R:['#### ','#   #','#### ','# #  ','#  ##'],
+  S:[' ####','#    ',' ### ','    #','#### '], T:['#####','  #  ','  #  ','  #  ','  #  '],
+  U:['#   #','#   #','#   #','#   #',' ### '], V:['#   #','#   #','#   #',' # # ','  #  '],
+  W:['#   #','#   #','# # #','## ##','#   #'], X:['#   #',' # # ','  #  ',' # # ','#   #'],
+  Y:['#   #',' # # ','  #  ','  #  ','  #  '], Z:['#####','   # ','  #  ',' #   ','#####'],
+  ' ':['     ','     ','     ','     ','     '],
+  '!':['  #  ','  #  ','  #  ','     ','  #  '],
+};
+
+function renderAsciiArt(text) {
+  const chars = text.toUpperCase().split('').map(c => PF[c] || PF[' ']);
+  return Array.from({ length: 5 }, (_, row) => ({
+    t: 'line', color: 'violet',
+    text: chars.map(c => c[row]).join(' ').replace(/#/g, '█'),
+  }));
+}
+
 const CMDS = {
   help: () => [
     { t: 'head', text: 'Available commands' },
-    { t: 'row', cmd: 'whoami',       desc: 'who is HAMS?' },
-    { t: 'row', cmd: 'skills',       desc: 'full tech stack' },
-    { t: 'row', cmd: 'projects',     desc: 'things I built' },
-    { t: 'row', cmd: 'contact',      desc: 'get in touch' },
-    { t: 'row', cmd: 'hire',         desc: 'best decision ever' },
-    { t: 'row', cmd: 'matrix',       desc: 'enter the matrix 🐇' },
-    { t: 'row', cmd: 'joke',         desc: 'developer humor' },
-    { t: 'row', cmd: 'ls',           desc: 'list files' },
-    { t: 'row', cmd: 'clear',        desc: 'clear terminal' },
+    { t: 'row', cmd: 'whoami',           desc: 'who is HAMS?' },
+    { t: 'row', cmd: 'skills',           desc: 'full tech stack' },
+    { t: 'row', cmd: 'projects',         desc: 'things I built' },
+    { t: 'row', cmd: 'contact',          desc: 'get in touch' },
+    { t: 'row', cmd: 'hire',             desc: 'best decision ever' },
+    { t: 'row', cmd: 'neofetch',         desc: 'system info (classic)' },
+    { t: 'row', cmd: 'matrix',           desc: 'enter the matrix 🐇' },
+    { t: 'row', cmd: 'ascii-art <text>', desc: 'render text as pixel art' },
+    { t: 'row', cmd: 'joke',             desc: 'developer humor' },
+    { t: 'row', cmd: 'ls',               desc: 'list files' },
+    { t: 'row', cmd: 'clear',            desc: 'clear terminal' },
   ],
   whoami: () => [
     { t: 'banner' },
@@ -120,6 +129,7 @@ const CMDS = {
     { t: 'ok',   text: 'Access granted. Nice sudo skills. 🎉' },
     { t: 'action', text: '→ Contact HAMS now', scroll: 'contact', autoScroll: true },
   ],
+  neofetch: () => [{ t: 'neofetch' }],
   ls: () => [
     { t: 'ls', items: ['about/', 'skills/', 'projects/', 'contact/', 'resume.pdf', 'README.md'] },
   ],
@@ -154,14 +164,13 @@ const CMDS = {
   },
 };
 
-// ── Render a single output block ─────────────────────────────────────────────
 function Block({ b, onScroll }) {
   const colorMap = { violet: 'text-violet-400', cyan: 'text-cyan-400', green: 'text-emerald-400', mgreen: 'text-green-400', yellow: 'text-yellow-400', red: 'text-red-400', white: 'text-slate-200', slate: 'text-slate-500' };
   switch (b.t) {
     case 'head': return <p className="text-slate-400 text-xs mb-0.5 mt-0.5 font-medium">{b.text}</p>;
-    case 'row':  return (
+    case 'row': return (
       <div className="flex gap-4 text-xs font-mono">
-        <span className="text-violet-400 w-24 flex-shrink-0">{b.cmd}</span>
+        <span className="text-violet-400 w-32 flex-shrink-0">{b.cmd}</span>
         <span className="text-slate-400">{b.desc}</span>
       </div>
     );
@@ -206,14 +215,54 @@ function Block({ b, onScroll }) {
         {b.text}
       </button>
     );
+    case 'neofetch': {
+      const art = [
+        'H   H  AAAAA  M   M  SSSSS',
+        'H   H  A   A  MM MM  S    ',
+        'HHHHH  AAAAA  M M M  SSSSS',
+        'H   H  A   A  M   M      S',
+        'H   H  A   A  M   M  SSSSS',
+      ];
+      const swatches = ['#ef4444','#eab308','#22c55e','#06b6d4','#3b82f6','#7c3aed','#a855f7','#94a3b8'];
+      const info = [
+        ['OS', 'Portfolio v2.0'], ['Host', 'Vercel (prod)'], ['Shell', 'React 18 + Vite'],
+        ['WM', 'Framer Motion'], ['Terminal', 'v1.0'], ['Theme', 'Dark (always)'],
+        ['CPU', 'Claude AI'], ['RAM', '∞ curiosity'], ['Uptime', 'Always building 🚀'],
+      ];
+      return (
+        <div className="font-mono text-[10px] leading-[1.35]">
+          <div className="flex gap-4 flex-wrap items-start">
+            <div style={{ color: '#7c3aed' }} className="flex-shrink-0">
+              {art.map((row, i) => <div key={i}>{row}</div>)}
+              <div className="flex gap-0.5 mt-1.5">
+                {swatches.map(c => <span key={c} style={{ background: c, display: 'inline-block', width: 12, height: 12, borderRadius: 2 }} />)}
+              </div>
+            </div>
+            <div className="space-y-0.5 pt-0.5">
+              <div>
+                <span style={{ color: '#a78bfa' }}>hams</span>
+                <span style={{ color: '#475569' }}>@</span>
+                <span style={{ color: '#22d3ee' }}>portfolio</span>
+              </div>
+              <div style={{ color: '#1e293b' }}>{'─'.repeat(20)}</div>
+              {info.map(([k, v]) => (
+                <div key={k}>
+                  <span style={{ color: '#7c3aed' }}>{k}</span>
+                  <span style={{ color: '#475569' }}>: </span>
+                  <span style={{ color: '#cbd5e1' }}>{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
     default: return null;
   }
 }
 
-// ── Quick command chips ───────────────────────────────────────────────────────
-const QUICK = ['help', 'whoami', 'skills', 'projects', 'contact', 'hire', 'matrix', 'joke', 'ls', 'sudo hire me'];
+const QUICK = ['help', 'whoami', 'neofetch', 'skills', 'projects', 'ascii-art hams', 'matrix', 'joke', 'sudo hire me'];
 
-// ── Main component ───────────────────────────────────────────────────────────
 export default function Terminal() {
   const canvasRef  = useRef(null);
   const inputRef   = useRef(null);
@@ -223,12 +272,12 @@ export default function Terminal() {
 
   useParticleCanvas(canvasRef);
 
-  const [history, setHistory]     = useState([
+  const [history, setHistory] = useState([
     { type: 'output', blocks: [{ t: 'line', color: 'cyan', text: 'Welcome to HAMS terminal v1.0 — type "help" to explore.' }] },
   ]);
-  const [input, setInput]         = useState('');
-  const [cmdHist, setCmdHist]     = useState([]);
-  const [histIdx, setHistIdx]     = useState(-1);
+  const [input, setInput]     = useState('');
+  const [cmdHist, setCmdHist] = useState([]);
+  const [histIdx, setHistIdx] = useState(-1);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -240,25 +289,33 @@ export default function Terminal() {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;
     if (cmd === 'clear') { setHistory([]); setCmdHist(p => [cmd, ...p]); setHistIdx(-1); setInput(''); return; }
+
     if (cmd === '↑↑↓↓←→←→ba' || cmd === 'konami') {
       setTimeout(() => window.dispatchEvent(new CustomEvent('konami')), 300);
     }
 
-    const fn = CMDS[cmd];
     let blocks;
     if (cmd === '↑↑↓↓←→←→ba' || cmd === 'konami') {
       blocks = [
         { t: 'line', color: 'mgreen', text: '> Konami sequence detected...' },
         { t: 'ok',   text: '🐇 Entering the Matrix. Hold on...' },
       ];
-    } else if (fn) {
-      blocks = fn();
-      const autoScroll = blocks.find(b => b.t === 'action' && b.autoScroll);
-      if (autoScroll) setTimeout(() => scrollToSection(autoScroll.scroll), 900);
+    } else if (cmd.startsWith('ascii-art')) {
+      const arg = cmd.slice(9).trim() || 'hams';
+      blocks = [
+        { t: 'line', color: 'slate', text: `rendering "${arg.toUpperCase()}"` },
+        ...renderAsciiArt(arg),
+      ];
     } else {
-      blocks = [{ t: 'line', color: 'red', text: `command not found: ${cmd}. Try "help"` }];
+      const fn = CMDS[cmd];
+      if (fn) {
+        blocks = fn();
+        const autoScroll = blocks.find(b => b.t === 'action' && b.autoScroll);
+        if (autoScroll) setTimeout(() => scrollToSection(autoScroll.scroll), 900);
+      } else {
+        blocks = [{ t: 'line', color: 'red', text: `command not found: ${cmd}. Try "help"` }];
+      }
     }
-
 
     setHistory(p => [...p, { type: 'input', text: cmd }, { type: 'output', blocks }]);
     setCmdHist(p => [cmd, ...p]);
@@ -281,28 +338,18 @@ export default function Terminal() {
     }
     if (e.key === 'Tab') {
       e.preventDefault();
-      const match = Object.keys(CMDS).find(c => c.startsWith(input.toLowerCase()));
-      if (match) setInput(match);
+      const all = [...Object.keys(CMDS), 'ascii-art'];
+      const match = all.find(c => c.startsWith(input.toLowerCase()));
+      if (match) setInput(match === 'ascii-art' ? 'ascii-art hams' : match);
     }
   };
 
   return (
-    <section
-      id="playground"
-      ref={sectionRef}
-      className="py-24 lg:py-32 relative overflow-hidden"
-      style={{ background: '#030712' }}
-    >
+    <section id="playground" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden" style={{ background: '#030712' }}>
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.45 }} />
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55 }}
-          className="mb-12"
-        >
+        <motion.div initial={{ opacity: 0, y: 25 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55 }} className="mb-12">
           <div className="flex items-center gap-3 mb-3">
             <span className="text-violet-400 font-mono text-sm">✦</span>
             <span className="text-slate-500 text-sm uppercase tracking-widest">Playground</span>
@@ -315,16 +362,12 @@ export default function Terminal() {
         </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-8 items-start">
-          {/* Terminal window — 3 cols */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 0.15 }}
+            initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55, delay: 0.15 }}
             className="lg:col-span-3 rounded-2xl overflow-hidden border border-white/[0.08] cursor-text"
             style={{ background: 'rgba(8,8,20,0.96)', backdropFilter: 'blur(20px)' }}
             onClick={() => inputRef.current?.focus()}
           >
-            {/* macOS chrome */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.025)' }}>
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full bg-red-500/70" />
@@ -334,12 +377,7 @@ export default function Terminal() {
               <span className="text-slate-500 text-xs font-mono mx-auto">hams@portfolio: ~</span>
             </div>
 
-            {/* Output */}
-            <div
-              ref={scrollRef}
-              className="h-80 overflow-y-auto px-4 py-3 space-y-2"
-              style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(124,58,237,0.3) transparent' }}
-            >
+            <div ref={scrollRef} className="h-80 overflow-y-auto px-4 py-3 space-y-2" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(124,58,237,0.3) transparent' }}>
               {history.map((entry, i) => (
                 <div key={i}>
                   {entry.type === 'input' && (
@@ -357,44 +395,32 @@ export default function Terminal() {
               ))}
             </div>
 
-            {/* Input row */}
             <form onSubmit={handleSubmit} className="flex items-center gap-2 px-4 py-3 border-t border-white/[0.06]">
               <span className="text-violet-400 text-xs font-mono flex-shrink-0">hams@portfolio:~$</span>
               <input
-                ref={inputRef}
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoComplete="off"
-                spellCheck={false}
+                ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
+                autoComplete="off" spellCheck={false}
                 className="flex-1 bg-transparent text-white text-xs font-mono outline-none caret-violet-400 placeholder-slate-600"
                 placeholder="type a command..."
               />
             </form>
           </motion.div>
 
-          {/* Right panel — 2 cols */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 0.25 }}
+            initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55, delay: 0.25 }}
             className="lg:col-span-2 space-y-5"
           >
             <div>
               <p className="text-slate-500 text-xs uppercase tracking-wider font-medium mb-3">Quick commands</p>
               <div className="flex flex-wrap gap-2">
                 {QUICK.map(cmd => (
-                  <button
-                    key={cmd}
-                    onClick={() => runCommand(cmd)}
+                  <button key={cmd} onClick={() => runCommand(cmd)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono border transition-all hover:-translate-y-0.5 ${
                       cmd === 'sudo hire me'
                         ? 'bg-violet-500/10 border-violet-500/30 text-violet-400 hover:bg-violet-500/20'
                         : 'bg-white/[0.03] border-white/[0.07] text-slate-400 hover:text-white hover:border-violet-500/20'
                     }`}
-                  >
-                    {cmd}
-                  </button>
+                  >{cmd}</button>
                 ))}
               </div>
             </div>
@@ -404,8 +430,8 @@ export default function Terminal() {
               <ul className="space-y-2 text-xs text-slate-500 font-mono">
                 <li><span className="text-slate-400">↑ ↓</span>  navigate command history</li>
                 <li><span className="text-slate-400">Tab</span>  autocomplete commands</li>
-                <li className="text-slate-600">try: sudo hire me 😏</li>
-                <li className="text-slate-600">try: matrix 🐇</li>
+                <li className="text-slate-600">try: ascii-art hams</li>
+                <li className="text-slate-600">try: neofetch</li>
                 <li className="text-slate-600">↑↑↓↓←→←→ba (secret!)</li>
               </ul>
             </div>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Facebook, Instagram, Heart, Zap } from 'lucide-react';
 
@@ -19,6 +20,14 @@ const navLinks = [
 ];
 
 export default function Footer() {
+  const [bdTime, setBdTime] = useState('');
+  useEffect(() => {
+    const update = () => setBdTime(new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+
   const scrollTo = (href) => {
     document.getElementById(href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -79,7 +88,10 @@ export default function Footer() {
             >
               hamsakib03@gmail.com
             </a>
-            <p className="text-slate-600 text-xs mb-5">Bangladesh 🇧🇩</p>
+            <p className="text-slate-600 text-xs mb-5">
+              Bangladesh 🇧🇩
+              {bdTime && <span className="text-slate-500 font-mono ml-2">· {bdTime} local</span>}
+            </p>
 
             {/* Social icons */}
             <div className="flex gap-2">
