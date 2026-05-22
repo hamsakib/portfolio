@@ -40,7 +40,7 @@ export default function Footer() {
                 className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-white font-mono"
                 style={{ background: 'linear-gradient(135deg, #7c3aed, #06b6d4)' }}
               >
-                HS
+                HAMS
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Hasan Al Mahmud Sakib</p>

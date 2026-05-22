@@ -30,7 +30,7 @@ const highlights = [
 const stats = [
   { value: '4+', label: 'Projects Built' },
   { value: '2+', label: 'Years Coding' },
-  { value: '8.0', label: 'IELTS Band' },
+  { value: 'Pro', label: 'English Level' },
   { value: '∞', label: 'AI Prompts/day' },
 ];
 
@@ -90,9 +90,8 @@ export default function About() {
                 <p className="text-slate-300 leading-relaxed">
                   I&apos;m Hasan Al Mahmud Sakib — a Full Stack Developer from Bangladesh, currently studying
                   CSE at <span className="text-violet-300 font-medium">North South University</span> (Bangladesh&apos;s #1 private university).
-                  I code with an AI co-pilot always open, and I hold an{' '}
-                  <span className="text-emerald-400 font-medium">IELTS Band 8</span> — meaning I communicate at expert
-                  English level with clients and teams worldwide.
+                  I code with an AI co-pilot always open, and I have{' '}
+                  <span className="text-emerald-400 font-medium">professional working proficiency in English</span> — communicating fluently with clients and teams worldwide.
                 </p>
               </div>
             </FadeIn>

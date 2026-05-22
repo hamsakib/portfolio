@@ -64,8 +64,8 @@ export default function Navbar() {
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative w-9 h-9 rounded-xl overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-cyan-500 opacity-100 group-hover:opacity-80 transition-opacity" />
-              <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm font-mono">
-                HS
+              <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xs font-mono">
+                HAMS
               </div>
             </div>
             <span className="hidden sm:block text-white font-semibold text-[15px] tracking-tight">

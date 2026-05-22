@@ -265,19 +265,11 @@ export default function Hero() {
                   border: '1px solid rgba(124,58,237,0.2)',
                 }}
               >
-                {/* Placeholder avatar — replace src with real photo */}
-                <div className="flex flex-col items-center gap-3">
-                  <div
-                    className="w-28 h-28 rounded-full flex items-center justify-center text-5xl font-black"
-                    style={{
-                      background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-                      boxShadow: '0 0 40px rgba(124,58,237,0.5)',
-                    }}
-                  >
-                    <span className="text-white font-mono">S</span>
-                  </div>
-                  <p className="text-slate-400 text-xs font-medium tracking-wider uppercase">Add your photo</p>
-                </div>
+                <img
+                  src="/profile.jpg"
+                  alt="Hasan Al Mahmud Sakib"
+                  className="w-full h-full object-cover object-top"
+                />
 
                 {/* Inner glow */}
                 <div
@@ -318,8 +310,8 @@ export default function Hero() {
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                 className="absolute top-1/2 -left-20 glass border border-emerald-500/25 rounded-xl px-3 py-2 hidden lg:flex flex-col items-center gap-0.5"
               >
-                <span className="text-xl font-black text-emerald-400">8.0</span>
-                <span className="text-[10px] text-slate-500 leading-none">IELTS Band</span>
+                <span className="text-[11px] font-black text-emerald-400 leading-tight text-center">Pro</span>
+                <span className="text-[10px] text-slate-500 leading-none text-center">English</span>
               </motion.div>
             </motion.div>
 
